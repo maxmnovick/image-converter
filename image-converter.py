@@ -40,31 +40,8 @@ for image in images:
     final_width = init_width
     final_height = init_height
 
-    contain_img = False # contain img if larger than set side length
-
-    print("Which side is larger, Width or Height?")
-    larger_side_length = init_width # make width by default arbitrarily, only change if height>width
-    if init_height > init_width:
-        larger_side_length = init_height
-        print("Height is greater than Width.")
-    else:
-        print("Width is greater than or equal to Height.")
-    print()
-    print("Is the larger side greater than the desired side length?")
-    print("larger_side_length, set_side_length: " + str(larger_side_length) + "," + str(set_side_length))
-
     print("\n===Contain Image===\n")
     im_with_border = ImageOps.contain(im, (set_side_length, set_side_length), Image.Resampling.LANCZOS) # this is to make sure the image gets resized properly
-
-    # im_with_border = im
-    # if larger_side_length > set_side_length:
-    #     print("larger_side_length > set_side_length, so shrink/contain the image within the set_side_length boundary")
-    #     print("\n===Contain Image===\n")
-    #     im_with_border = ImageOps.contain(im, (set_side_length, set_side_length), Image.Resampling.LANCZOS) # this is to make sure the image gets resized properly
-    # else:
-    #     print("Larger Side Length is less than or equal to Set Side Length, so expand/pad image.")
-        #print("\n===Pad Image===\n")
-        #im_with_border = ImageOps.pad(im, (set_side_length, set_side_length), Image.Resampling.LANCZOS) # this is to make sure the image gets resized properly
 
     # if image square then we do not need border
     if init_width == init_height:
@@ -76,17 +53,11 @@ for image in images:
         size_change_factor = init_width / final_width
         final_height = round(init_height / size_change_factor)
 
-        if init_width > set_side_length:
-            contain_img = True
-
     elif init_width < init_height:
         final_height = set_side_length
 
         size_change_factor = init_height / final_height
         final_width = round(init_width / size_change_factor)
-
-        if init_height > set_side_length:
-            contain_img = True
 
     print()
 
@@ -98,31 +69,15 @@ for image in images:
     print("final_width no border: " + str(final_width))
     print("final_height no border: " + str(final_height))
 
-    #im_with_border = im
-    # if longer side is greater than set side length, contain img
-    # example: PIL.ImageOps.contain(image, size, method=Resampling.BICUBIC)
-    # if contain_img:
-    #     print("\n===Contain Image===\n")
-    #     im_with_border = ImageOps.contain(im, (set_side_length, set_side_length), Image.Resampling.LANCZOS)
-    # else if larger side is less than set side length, expand img
-
-    #im.resize((final_width, final_height), Image.Resampling.LANCZOS)
-
     # either one or both of these borders will be 0 bc the larger side will be equal to set side length
     width_border = round(abs(final_width - set_side_length) / 2)
     height_border = round(abs(final_height - set_side_length) / 2)
     print("width_border: " + str(width_border))
     print("height_border: " + str(height_border))
 
-    #im_with_border = resizeimage.resize_contain(im, [set_side_length, set_side_length], True, (255, 0, 0, 1))
-
-    #im_with_border = ImageOps.expand(im, border=300, fill='black')
-
     im_with_border = ImageOps.expand(im_with_border, border=(width_border, height_border), fill='black')
     
-    #im_with_border.resize((set_side_length, set_side_length))
-    #im.show() # for testing purposes
-    im_with_border.show()
+    im_with_border.show() # for testing
 
     print("final_width: " + str(final_width+2*width_border))
     print("final_height: " + str(final_height+2*height_border))
